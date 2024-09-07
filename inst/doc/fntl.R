@@ -52,7 +52,7 @@ print(out$value)
 ## Rcpp::List x = Rcpp::wrap(out);
 
 ## fntl::integrate_status status = fntl::integrate_status::OK;  // Define a status
-## int err = to_underlying(status);                            // status to int
+## int err = to_underlying(status);                             // status to int
 ## status1 = fntl::integrate_status(err);                       // int to status
 
 ## typedef function<double(double)> dfd;

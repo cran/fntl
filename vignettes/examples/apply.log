@@ -1,0 +1,92 @@
+==4093396== Memcheck, a memory error detector
+==4093396== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==4093396== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==4093396== Command: /usr/lib/R/bin/exec/R --no-save --vanilla
+==4093396== 
+
+R version 4.4.1 (2024-06-14) -- "Race for Your Life"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> Rcpp::sourceCpp("apply.cpp")
+> X = matrix(1:12, 4, 3)
+> out = apply_ex(X)
+==4093396== Use of uninitialised value of size 8
+==4093396==    at 0x49D9BA4: Rf_xlength (in /usr/lib/R/lib/libR.so)
+==4093396==    by 0x11FA00E9: Rcpp::Vector<14, Rcpp::PreserveStorage>::size() const (Vector.h:276)
+==4093396==    by 0x11FA5731: Rcpp::sugar::Sum<14, true, Rcpp::Vector<14, Rcpp::PreserveStorage> >::get() const (sum.h:63)
+==4093396==    by 0x11FA48DB: Rcpp::sugar::Lazy<double, Rcpp::sugar::Sum<14, true, Rcpp::Vector<14, Rcpp::PreserveStorage> > >::operator double() const (Lazy.h:31)
+==4093396==    by 0x11F99E23: std::enable_if<is_invocable_r_v<double, apply_ex(Rcpp::Matrix<14, Rcpp::PreserveStorage>)::{lambda(Rcpp::Vector<14, Rcpp::PreserveStorage>)#2}&, Rcpp::Vector<14, Rcpp::PreserveStorage> const&>, double>::type std::__invoke_r<double, apply_ex(Rcpp::Matrix<14, Rcpp::PreserveStorage>)::{lambda(Rcpp::Vector<14, Rcpp::PreserveStorage>)#2}&, Rcpp::Vector<14, Rcpp::PreserveStorage> const&>(apply_ex(Rcpp::Matrix<14, Rcpp::PreserveStorage>)::{lambda(Rcpp::Vector<14, Rcpp::PreserveStorage>)#2}&, Rcpp::Vector<14, Rcpp::PreserveStorage> const&) (invoke.h:116)
+==4093396==    by 0x11F99B72: std::_Function_handler<double (Rcpp::Vector<14, Rcpp::PreserveStorage> const&), apply_ex(Rcpp::Matrix<14, Rcpp::PreserveStorage>)::{lambda(Rcpp::Vector<14, Rcpp::PreserveStorage>)#2}>::_M_invoke(std::_Any_data const&, Rcpp::Vector<14, Rcpp::PreserveStorage> const&) (std_function.h:290)
+==4093396==    by 0x11FA0588: std::function<double (Rcpp::Vector<14, Rcpp::PreserveStorage> const&)>::operator()(Rcpp::Vector<14, Rcpp::PreserveStorage> const&) const (std_function.h:590)
+==4093396==    by 0x11FA0B82: Rcpp::Vector<14, Rcpp::PreserveStorage> fntl::col_apply<double, 14>(Rcpp::Matrix<14, Rcpp::PreserveStorage> const&, std::function<double (Rcpp::Vector<14, Rcpp::PreserveStorage> const&)> const&) (apply.h:32)
+==4093396==    by 0x11F99016: apply_ex(Rcpp::Matrix<14, Rcpp::PreserveStorage>) (apply.cpp:16)
+==4093396==    by 0x11F994D9: sourceCpp_1_apply_ex (apply.cpp:34)
+==4093396==    by 0x495830D: ??? (in /usr/lib/R/lib/libR.so)
+==4093396==    by 0x495888C: ??? (in /usr/lib/R/lib/libR.so)
+==4093396== 
+> print(out)
+$pows
+     [,1] [,2] [,3]
+[1,]    1   25   81
+[2,]    4   36  100
+[3,]    9   49  121
+[4,]   16   64  144
+
+$rowsums
+[1] 0 0 0 0
+
+$colsums
+[1] 0 0 0
+
+> 
+> 
+==4093396== 
+==4093396== HEAP SUMMARY:
+==4093396==     in use at exit: 59,588,860 bytes in 11,441 blocks
+==4093396==   total heap usage: 31,834 allocs, 20,393 frees, 92,987,001 bytes allocated
+==4093396== 
+==4093396== LEAK SUMMARY:
+==4093396==    definitely lost: 0 bytes in 0 blocks
+==4093396==    indirectly lost: 0 bytes in 0 blocks
+==4093396==      possibly lost: 0 bytes in 0 blocks
+==4093396==    still reachable: 59,588,860 bytes in 11,441 blocks
+==4093396==                       of which reachable via heuristic:
+==4093396==                         newarray           : 4,264 bytes in 1 blocks
+==4093396==         suppressed: 0 bytes in 0 blocks
+==4093396== Reachable blocks (those to which a pointer was found) are not shown.
+==4093396== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==4093396== 
+==4093396== Use --track-origins=yes to see where uninitialised values come from
+==4093396== ERROR SUMMARY: 7 errors from 1 contexts (suppressed: 0 from 0)
+==4093396== 
+==4093396== 7 errors in context 1 of 1:
+==4093396== Use of uninitialised value of size 8
+==4093396==    at 0x49D9BA4: Rf_xlength (in /usr/lib/R/lib/libR.so)
+==4093396==    by 0x11FA00E9: Rcpp::Vector<14, Rcpp::PreserveStorage>::size() const (Vector.h:276)
+==4093396==    by 0x11FA5731: Rcpp::sugar::Sum<14, true, Rcpp::Vector<14, Rcpp::PreserveStorage> >::get() const (sum.h:63)
+==4093396==    by 0x11FA48DB: Rcpp::sugar::Lazy<double, Rcpp::sugar::Sum<14, true, Rcpp::Vector<14, Rcpp::PreserveStorage> > >::operator double() const (Lazy.h:31)
+==4093396==    by 0x11F99E23: std::enable_if<is_invocable_r_v<double, apply_ex(Rcpp::Matrix<14, Rcpp::PreserveStorage>)::{lambda(Rcpp::Vector<14, Rcpp::PreserveStorage>)#2}&, Rcpp::Vector<14, Rcpp::PreserveStorage> const&>, double>::type std::__invoke_r<double, apply_ex(Rcpp::Matrix<14, Rcpp::PreserveStorage>)::{lambda(Rcpp::Vector<14, Rcpp::PreserveStorage>)#2}&, Rcpp::Vector<14, Rcpp::PreserveStorage> const&>(apply_ex(Rcpp::Matrix<14, Rcpp::PreserveStorage>)::{lambda(Rcpp::Vector<14, Rcpp::PreserveStorage>)#2}&, Rcpp::Vector<14, Rcpp::PreserveStorage> const&) (invoke.h:116)
+==4093396==    by 0x11F99B72: std::_Function_handler<double (Rcpp::Vector<14, Rcpp::PreserveStorage> const&), apply_ex(Rcpp::Matrix<14, Rcpp::PreserveStorage>)::{lambda(Rcpp::Vector<14, Rcpp::PreserveStorage>)#2}>::_M_invoke(std::_Any_data const&, Rcpp::Vector<14, Rcpp::PreserveStorage> const&) (std_function.h:290)
+==4093396==    by 0x11FA0588: std::function<double (Rcpp::Vector<14, Rcpp::PreserveStorage> const&)>::operator()(Rcpp::Vector<14, Rcpp::PreserveStorage> const&) const (std_function.h:590)
+==4093396==    by 0x11FA0B82: Rcpp::Vector<14, Rcpp::PreserveStorage> fntl::col_apply<double, 14>(Rcpp::Matrix<14, Rcpp::PreserveStorage> const&, std::function<double (Rcpp::Vector<14, Rcpp::PreserveStorage> const&)> const&) (apply.h:32)
+==4093396==    by 0x11F99016: apply_ex(Rcpp::Matrix<14, Rcpp::PreserveStorage>) (apply.cpp:16)
+==4093396==    by 0x11F994D9: sourceCpp_1_apply_ex (apply.cpp:34)
+==4093396==    by 0x495830D: ??? (in /usr/lib/R/lib/libR.so)
+==4093396==    by 0x495888C: ??? (in /usr/lib/R/lib/libR.so)
+==4093396== 
+==4093396== ERROR SUMMARY: 7 errors from 1 contexts (suppressed: 0 from 0)
