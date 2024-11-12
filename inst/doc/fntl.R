@@ -111,43 +111,43 @@ print(out$value)
 
 ## -----------------------------------------------------------------------------
 #| eval: false
-## source("examples/timing1.R")
-## Rcpp::sourceCpp("examples/timing2.cpp")
-## Rcpp::sourceCpp("examples/timing3.cpp")
-## Rcpp::sourceCpp("examples/timing4.cpp")
-## n_levels = c(100, 200, 500, 1000, 10000)
+# source("examples/timing1.R")
+# Rcpp::sourceCpp("examples/timing2.cpp")
+# Rcpp::sourceCpp("examples/timing3.cpp")
+# Rcpp::sourceCpp("examples/timing4.cpp")
+# n_levels = c(100, 200, 500, 1000, 10000)
 
 
 ## -----------------------------------------------------------------------------
 #| eval: false
-## set.seed(1234)
-## start = Sys.time()
-## timing1_ex(R = 200, n_levels)
-## print(Sys.time() - start)
+# set.seed(1234)
+# start = Sys.time()
+# timing1_ex(R = 200, n_levels)
+# print(Sys.time() - start)
 
 
 ## -----------------------------------------------------------------------------
 #| eval: false
-## set.seed(1234)
-## start = Sys.time()
-## timing2_ex(R = 200, n_levels)
-## print(Sys.time() - start)
+# set.seed(1234)
+# start = Sys.time()
+# timing2_ex(R = 200, n_levels)
+# print(Sys.time() - start)
 
 
 ## -----------------------------------------------------------------------------
 #| eval: false
-## set.seed(1234)
-## start = Sys.time()
-## timing3_ex(R = 200, n_levels)
-## print(Sys.time() - start)
+# set.seed(1234)
+# start = Sys.time()
+# timing3_ex(R = 200, n_levels)
+# print(Sys.time() - start)
 
 
 ## -----------------------------------------------------------------------------
 #| eval: false
-## set.seed(1234)
-## start = Sys.time()
-## timing4_ex(R = 200, n_levels)
-## print(Sys.time() - start)
+# set.seed(1234)
+# start = Sys.time()
+# timing4_ex(R = 200, n_levels)
+# print(Sys.time() - start)
 
 
 ## double sum1p(Rcpp::NumericMatrix x) { return Rcpp::sum(x + 1); }
@@ -928,9 +928,9 @@ print(out$res3[nn])
 
 ## -----------------------------------------------------------------------------
 #| eval: false
-## apply(X, c(1,2), f)
-## apply(X, 1, f)
-## apply(X, 2, f)
+# apply(X, c(1,2), f)
+# apply(X, 1, f)
+# apply(X, 2, f)
 
 
 ## template <typename T, int RTYPE>
@@ -1028,7 +1028,7 @@ solve(A, b)
 
 ## -----------------------------------------------------------------------------
 #| eval: false
-## which(f(X), arr.ind = TRUE)
+# which(f(X), arr.ind = TRUE)
 
 
 ## template <typename T, int RTYPE>
@@ -1050,4 +1050,103 @@ print(out)
 ## -----------------------------------------------------------------------------
 f = function(x) { x > 0 & x < 0.5 }
 which(f(X), arr.ind = TRUE) - 1
+
+
+## typedef std::function<double(double,bool)> density;       // <1>
+## typedef std::function<double(double,bool,bool)> cdf;      // <2>
+## typedef std::function<double(double,bool,bool)> quantile; // <3>
+
+## double d_trunc(
+## 	double x,                      // <1>
+## 	double lo,                     // <2>
+## 	double hi,                     // <3>
+## 	const density& f,              // <4>
+## 	const cdf& F,                  // <5>
+## 	bool log = false               // <6>
+## )
+## 
+## Rcpp::NumericVector d_trunc(
+## 	const Rcpp::NumericVector& x,  // <1>
+## 	const Rcpp::NumericVector& lo, // <2>
+## 	const Rcpp::NumericVector& hi, // <3>
+## 	const density& f,              // <4>
+## 	const cdf& F,                  // <5>
+## 	bool log = false               // <6>
+## )
+
+## -----------------------------------------------------------------------------
+Rcpp::sourceCpp("examples/d_trunc.cpp")
+x = seq(0, 1, length.out = 30)
+d_trunc_ex(x, shape1 = 2, shape2 = 5, lo = 0.5, hi = 0.95)
+
+
+## double p_trunc(
+## 	double x,              // <1>
+## 	double lo,             // <2>
+## 	double hi,             // <3>
+## 	const cdf& F,          // <4>
+## 	bool lower = true,     // <5>
+## 	bool log = false       // <6>
+## )
+## 
+## Rcpp::NumericVector p_trunc(
+## 	const Rcpp::NumericVector& x,  // <1>
+## 	const Rcpp::NumericVector& lo, // <2>
+## 	const Rcpp::NumericVector& hi, // <3>
+## 	const cdf& F,                  // <4>
+## 	bool lower = true,             // <5>
+## 	bool log = false               // <6>
+## )
+
+## -----------------------------------------------------------------------------
+Rcpp::sourceCpp("examples/p_trunc.cpp")
+x = seq(0, 1, length.out = 30)
+p_trunc_ex(x, shape1 = 2, shape2 = 5, lo = 0.5, hi = 0.95)
+
+
+## double q_trunc(
+## 	double p,              // <1>
+## 	double lo,             // <2>
+## 	double hi,             // <3>
+## 	const cdf& F,          // <4>
+## 	const quantile& Finv,  // <5>
+## 	bool lower = true,     // <6>
+## 	bool log = false       // <7>
+## )
+## 
+## Rcpp::NumericVector q_trunc(
+## 	const Rcpp::NumericVector& p,  // <1>
+## 	const Rcpp::NumericVector& lo, // <2>
+## 	const Rcpp::NumericVector& hi, // <3>
+## 	const cdf& F,                  // <4>
+## 	const quantile& Finv,          // <5>
+## 	bool lower = true,             // <6>
+## 	bool log = false               // <7>
+## )
+
+## -----------------------------------------------------------------------------
+Rcpp::sourceCpp("examples/q_trunc.cpp")
+p = seq(0, 1, length.out = 30)
+q_trunc_ex(p, shape1 = 2, shape2 = 5, lo = 0.5, hi = 0.95)
+
+
+## double r_trunc(
+## 	double lo,             // <2>
+## 	double hi,             // <3>
+## 	const cdf& F,          // <4>
+## 	const quantile& Finv   // <5>
+## )
+## 
+## Rcpp::NumericVector r_trunc(
+## 	unsigned int n,                // <1>
+## 	const Rcpp::NumericVector& lo, // <2>
+## 	const Rcpp::NumericVector& hi, // <3>
+## 	const cdf& F,                  // <4>
+## 	const quantile& Finv           // <5>
+## )
+## 
+
+## -----------------------------------------------------------------------------
+Rcpp::sourceCpp("examples/r_trunc.cpp")
+r_trunc_ex(n = 20, shape1 = 2, shape2 = 5, lo = 0.5, hi = 0.95)
 

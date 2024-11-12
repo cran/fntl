@@ -1,6 +1,6 @@
 Package: fntl
 Title: Numerical Tools for 'Rcpp' and Lambda Functions
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     person("Andrew M.", "Raim", email = "andrew.raim@gmail.com",
         role = c("aut", "cre"), comment = c(ORCID = "0000-0002-4440-2330"))
@@ -20,8 +20,8 @@ LinkingTo: Rcpp
 Imports: Rcpp
 VignetteBuilder: quarto
 NeedsCompilation: yes
-Packaged: 2024-09-03 13:42:58 UTC; araim
+Packaged: 2024-11-12 17:56:15 UTC; araim
 Author: Andrew M. Raim [aut, cre] (<https://orcid.org/0000-0002-4440-2330>)
 Maintainer: Andrew M. Raim <andrew.raim@gmail.com>
 Repository: CRAN
-Date/Publication: 2024-09-07 09:10:02 UTC
+Date/Publication: 2024-11-12 19:00:02 UTC
